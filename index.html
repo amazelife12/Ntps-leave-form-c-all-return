@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>楠梓國小班級請假單 C版</title>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>楠梓國小班級請假單</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,6 +139,14 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
 .care { display:flex; flex-direction:column; gap:10px; }
 .care[hidden] { display:none; }
 .care .care-t { font-weight:700; font-size:15px; color:var(--ink); margin:0; }
+.setup-box { background: var(--card); border: 2px solid var(--accent); border-radius: var(--radius); padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; }
+.setup-box h2 { color: var(--accent); font-size: 20px; }
+.setup-guide { margin: 0; padding-left: 20px; font-size: 14px; color: var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.setup-res { background: var(--accent-soft); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; }
+.setup-res input { background: var(--card); font-size: 13px; }
+.ver { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
+.setup-box textarea { width: 100%; min-height: 84px; padding: 9px 12px; font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 8px; }
+.setup-box code { background: var(--accent-soft); padding: 0 4px; border-radius: 4px; }
 .care .care-s { font-size:13px; color:var(--muted); margin:0; }
 .field .care-s { font-size:13px; color:var(--muted); margin:0; }
 .care button.card { padding:0; border:1px solid var(--rule); border-radius:12px; overflow:hidden; background:var(--card); cursor:zoom-in; display:block; width:100%; }
@@ -152,8 +160,57 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
 </style>
 
 <div class="wrap">
+  <section class="setup-box" id="setupPanel" hidden>
+    <h2>🛠️ 導師專屬請假網址產生器</h2>
+    <ol class="setup-guide">
+      <li>用自己的 Google 帳號開新表單，依序建 <strong>6 個「簡答」題</strong>：<br><strong>1.座號 ｜ 2.姓名 ｜ 3.假別 ｜ 4.請假日期 ｜ 5.請假原因 ｜ 6.是否需要後續</strong></li>
+      <li>表單右上角按<strong>「發布」</strong>（作答者設為「任何知道連結的人」）。「回覆」分頁的設定請<strong>不要</strong>開啟「限制 1 次回覆」，也<strong>不要</strong>收集電子郵件地址。</li>
+      <li>表單右上角三個點選<strong>「預先填寫表單」</strong>，6 題依序填入 <code>1</code>～<code>6</code>，點「取得連結」並複製整串網址。</li>
+      <li><strong>開啟信箱提醒（建議）：</strong>到表單「回覆」分頁 → 點右上角 <code>⋮</code> → 勾選<strong>「接收新回覆的電子郵件通知」</strong>。</li>
+      <li>午餐停餐、傳染病通報會由系統<strong>自動送到午餐與健康中心的表單</strong>，導師不需要另外設定。</li>
+    </ol>
+    <div class="field">
+      <label for="setupCls">班級代號（必填，3 位數，例：208 代表二年8班）</label>
+      <input type="text" id="setupCls" inputmode="numeric" maxlength="3" placeholder="例：208" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="setupRaw">貼上 Google 表單「預先填寫的連結」（必填）</label>
+      <textarea id="setupRaw" placeholder="請貼上 https://docs.google.com/forms/d/e/... 整串網址"></textarea>
+    </div>
+    <button type="button" class="btn" id="setupGen" style="align-self:stretch">產生我的專屬請假網址</button>
+    <p class="warn" id="setupErr" hidden></p>
+    <div class="setup-res" id="setupOut" hidden>
+      <strong style="color:var(--ok);font-size:14px">✅ 專屬請假網址已產生！請複製下方網址給貴班家長：</strong>
+      <input type="text" id="setupFinalUrl" readonly>
+      <button type="button" class="btn" id="setupCopyBtn" style="align-self:stretch">一鍵複製專屬網址</button>
+    </div>
+  </section>
+
+  <section class="setup-box" id="adminPanel" hidden>
+    <h2>🔧 管理者：午餐與健康中心表單設定產生器</h2>
+    <ol class="setup-guide">
+      <li>午餐、健康中心的表單題目全部設成「簡答」或「單選」題，<strong>不要收集電子郵件</strong>、不要限制 1 次回覆、不要限制登入。</li>
+      <li>用「預先填寫表單」每題都填一個測試答案（單選題選任一項），取得連結。</li>
+      <li>在下方選擇單位、貼上連結，按「產生設定」，再把結果交給網頁維護者。</li>
+    </ol>
+    <div class="field">
+      <label for="adminUnit">單位</label>
+      <select id="adminUnit" style="min-height:46px;font:inherit;border:1.5px solid var(--rule);border-radius:8px;padding:0 10px;background:var(--paper);color:var(--ink)">
+        <option value="lunch">午餐停餐表單（9 題：班級、座號、姓名、申請事由、葷素、停餐日期區間、停餐天數、退費金額、備註）</option>
+        <option value="health">健康中心通報表單（12 題：班級、座號、姓名、症狀診斷、發病日、確診日、就醫院所、請假起始日、安親班、處置方式、住院日、兄弟姊妹）</option>
+      </select>
+    </div>
+    <div class="field"><label for="adminRaw">貼上「預先填寫的連結」</label><textarea id="adminRaw"></textarea></div>
+    <button type="button" class="btn" id="adminGen" style="align-self:stretch">產生設定</button>
+    <p class="warn" id="adminErr" hidden></p>
+    <div class="setup-res" id="adminOut" hidden>
+      <strong style="font-size:14px">請複製下面整段設定：</strong>
+      <textarea id="adminText" readonly></textarea>
+    </div>
+  </section>
+
   <header>
-    <p class="kicker">楠梓國小家長專用</p>
+    <p class="kicker" id="kickerText">楠梓國小家長專用</p>
     <h1>🌸楠梓國小班級請假單🌸</h1>
     <p>由上往下填寫，直到最後一步完成，才算完成請假。</p>
   </header>
@@ -164,6 +221,10 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       <button type="button" class="linkbtn" id="reset">清除重填</button>
     </div>
     <div class="form">
+      <div class="field" id="clsWrap" hidden>
+        <label for="clsIn">班級代號（3 位數）</label>
+        <input type="text" id="clsIn" inputmode="numeric" maxlength="3" placeholder="例：208（二年8班）" autocomplete="off">
+      </div>
       <div class="field">
         <label for="who">座號／姓名</label>
         <input type="text" id="who" placeholder="例：30號 王小楠" autocomplete="off">
@@ -264,14 +325,119 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     <div class="stamp" aria-hidden="true">家長<br>確認</div>
     <p id="finishText">複製請假訊息，回到line貼給老師，請假才算完成！謝謝 😊</p>
   </div>
+  <p class="ver">公版 v9</p>
 </div>
 
 <div class="zoom" id="zoom" hidden><button type="button" class="x" id="zoomX">關閉 ✕</button><img id="zoomImg" alt=""></div>
 <script>
 (function () {
-  var LUNCH_URL = "https://forms.gle/cLhvQWdKdwa3FSXm8";
-  var REPORT_URL = "https://cpmimicker07-cloud.github.io/ntpshealth/";
-  var KEY = "class-leave-c-v1";
+  var params = new URLSearchParams(window.location.search);
+
+  /* ====== 全校共用表單設定（由管理者產生，貼在這裡）======
+     id 留空代表尚未啟用，頁面不會傳送。 */
+  var LUNCH = { id: "", e: { cls: "", seat: "", name: "", reason: "", meal: "", range: "", days: "", refund: "", note: "" } };
+  var HEALTH = { id: "", e: { cls: "", seat: "", name: "", symptom: "", onset: "", diag: "", clinic: "", start: "", cram: "", disp: "", admit: "", sib: "" } };
+  /* ====== 設定結束 ====== */
+  var LUNCH_KEYS = ["cls", "seat", "name", "reason", "meal", "range", "days", "refund", "note"];
+  var HEALTH_KEYS = ["cls", "seat", "name", "symptom", "onset", "diag", "clinic", "start", "cram", "disp", "admit", "sib"];
+  var LUNCH_REASON = {
+    "事假": "事假(有繳費人員停餐連續3天以上才能退費)",
+    "病假": "病假(有繳費人員停餐連續3天以上才能退費)",
+    "喪假": "喪假(有繳費人員停餐連續3天以上才能退費)",
+    "公假": "公假(1天也可退費,備註請寫參加什麼活動或比賽)"
+  };
+  var GRADES = "一二三四五六";
+
+  /* 班級：新網址用 c=208；舊網址的 cls=二年8班 也能對應 */
+  var classCode = "", classLabel = "";
+  (function () {
+    var c = (params.get("c") || "").trim(), cls = (params.get("cls") || "").trim();
+    if (/^[1-6]\d{2}$/.test(c)) classCode = c;
+    else if (cls) {
+      var m = cls.match(/^([一二三四五六1-6])\s*年\s*(\d{1,2})\s*班?$/);
+      if (m) {
+        var g = GRADES.indexOf(m[1]); g = g >= 0 ? g + 1 : +m[1];
+        classCode = g + ("0" + m[2]).slice(-2);
+      }
+    }
+    classLabel = classCode ? (GRADES.charAt(+classCode.charAt(0) - 1) + "年" + (+classCode.slice(1)) + "班") : cls;
+  })();
+  var $ = function (s) { return document.querySelector(s); };
+  if (classLabel) {
+    $("#kickerText").textContent = "楠梓國小 " + classLabel + " 家長專用";
+    document.title = "楠梓國小 " + classLabel + " 班級請假單";
+  }
+
+  function entriesOf(raw) {
+    var idm = raw.match(/\/forms\/d\/e\/([a-zA-Z0-9_-]+)/);
+    var ems = raw.match(/entry\.(\d+)=/g) || [];
+    return { id: idm ? idm[1] : "", e: ems.map(function (m) { return m.replace(/\D/g, ""); }) };
+  }
+
+  if (params.get("setup") === "1") {
+    $("#setupPanel").hidden = false;
+    $("#setupGen").addEventListener("click", function () {
+      var raw = $("#setupRaw").value.trim();
+      var cls = $("#setupCls").value.trim();
+      var err = $("#setupErr");
+      var out = $("#setupOut");
+      err.hidden = true;
+      out.hidden = true;
+      if (!/^[1-6]\d{2}$/.test(cls)) {
+        err.textContent = "請填 3 位數的班級代號，例如二年8班填 208。";
+        err.hidden = false;
+        return;
+      }
+      var r = entriesOf(raw);
+      if (!r.id) {
+        err.textContent = "找不到表單 ID，請確認貼上的是完整的 Google 表單「預先填寫的連結」。";
+        err.hidden = false;
+        return;
+      }
+      if (r.e.length < 6) {
+        err.textContent = "目前只偵測到 " + r.e.length + " 個欄位！請確認 6 個題目都有先填入測試文字（1～6）再按「取得連結」。";
+        err.hidden = false;
+        return;
+      }
+      var baseUrl = window.location.origin + window.location.pathname;
+      var newParams = new URLSearchParams();
+      newParams.set("form", r.id);
+      newParams.set("e", r.e.slice(0, 6).join(","));
+      newParams.set("c", cls);
+      $("#setupFinalUrl").value = baseUrl + "?" + newParams.toString();
+      out.hidden = false;
+    });
+    $("#setupCopyBtn").addEventListener("click", function () {
+      var inp = $("#setupFinalUrl");
+      inp.select();
+      try {
+        navigator.clipboard.writeText(inp.value).then(function () {
+          $("#setupCopyBtn").textContent = "✅ 已複製！可以直接貼給家長使用";
+        });
+      } catch (e) {}
+    });
+  }
+
+  if (params.get("setup") === "2") {
+    $("#adminPanel").hidden = false;
+    $("#adminGen").addEventListener("click", function () {
+      var unit = $("#adminUnit").value;
+      var keys = unit === "lunch" ? LUNCH_KEYS : HEALTH_KEYS;
+      var err = $("#adminErr"), out = $("#adminOut");
+      err.hidden = true; out.hidden = true;
+      var r = entriesOf($("#adminRaw").value.trim());
+      if (!r.id) { err.textContent = "找不到表單 ID，請貼上完整的「預先填寫的連結」。"; err.hidden = false; return; }
+      if (r.e.length !== keys.length) {
+        err.textContent = "這個單位需要 " + keys.length + " 題，但連結裡偵測到 " + r.e.length + " 個欄位。請確認每一題都填了測試答案，或題數是否一致。";
+        err.hidden = false; return;
+      }
+      var e = {};
+      keys.forEach(function (k, i) { e[k] = r.e[i]; });
+      $("#adminText").value = "var " + (unit === "lunch" ? "LUNCH" : "HEALTH") + " = " + JSON.stringify({ id: r.id, e: e }) + ";";
+      out.hidden = false;
+    });
+  }
+  var KEY = "class-leave-all-v1";
   var TTL = 24 * 60 * 60 * 1000;
   var state = { type: "事假", days: "full" };
   var OPTIONS = {
@@ -285,7 +451,6 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
   var picked = [];
   var diseases = [];
   var lastType = "";
-  var $ = function (s) { return document.querySelector(s); };
 
   function radio(name) {
     var el = document.querySelector('input[name="' + name + '"]:checked');
@@ -391,7 +556,7 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       localStorage.setItem(KEY, JSON.stringify({
         ts: Date.now(),
         type: radio("type"), days: radio("days"), hw: radio("hw"),
-        onset: $("#onset").value, diag: $("#diag").value, clinic: $("#clinic").value, cram: $("#cram").value, disp: radio("disp"), meal: radio("meal"), admit: $("#admit").value, sib: $("#sib").value,
+        onset: $("#onset").value, diag: $("#diag").value, clinic: $("#clinic").value, cram: $("#cram").value, disp: radio("disp"), meal: radio("meal"), clsIn: $("#clsIn").value, admit: $("#admit").value, sib: $("#sib").value,
         who: $("#who").value, d1: $("#d1").value, d2: $("#d2").value, t1: $("#t1").value, t2: $("#t2").value, why: $("#why").value, picked: picked, diseases: diseases, dOther: $("#dOther").value
       }));
     } catch (e) {}
@@ -414,11 +579,12 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       $("#dOther").value = s.dOther || "";
       ["onset", "diag", "clinic", "cram", "admit", "sib"].forEach(function (k) { $("#" + k).value = s[k] || ""; });
       setRadio("disp", s.disp); setRadio("meal", s.meal);
+      $("#clsIn").value = s.clsIn || "";
     } catch (e) {}
   }
   function reset() {
     try { localStorage.removeItem(KEY); } catch (e) {}
-    ["#who", "#d1", "#d2", "#t1", "#t2", "#why", "#onset", "#diag", "#clinic", "#cram", "#admit", "#sib"].forEach(function (s) { $(s).value = ""; });
+    ["#who", "#d1", "#d2", "#t1", "#t2", "#why", "#onset", "#diag", "#clinic", "#cram", "#admit", "#sib", "#clsIn"].forEach(function (s) { $(s).value = ""; });
     Array.prototype.forEach.call(document.querySelectorAll('input[type="radio"]'), function (r) { r.checked = r.defaultChecked; });
     picked = []; diseases = []; lastType = ""; showMiss = false;
     $("#dOther").value = "";
@@ -436,8 +602,10 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     "腸胃炎/腸胃型感冒": "症狀解除後再觀察48小時才能返校",
     "水痘": "水泡完全結痂脫落才能返校"
   };
+  function needCls() { return !classCode && !!(LUNCH.id || HEALTH.id); }
   function missing() {
     var m = [];
+    if (needCls() && !/^[1-6]\d{2}$/.test($("#clsIn").value.trim())) m.push({ label: "班級代號（3位數，例：208）", el: "#clsIn" });
     if (!$("#who").value.trim()) m.push({ label: "座號／姓名", el: "#who" });
     if (!$("#d1").value) m.push({ label: "請假日期", el: "#d1" });
     else if (spanDays() < 1) m.push({ label: "請假日期（請檢查日期）", el: "#d1" });
@@ -537,6 +705,7 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     var rep0 = needs().report;
     $("#epi").hidden = !rep0;
     $("#mealWrap").hidden = !needs().lunch;
+    $("#clsWrap").hidden = !needCls();
     $("#admitWrap").hidden = !(rep0 && radio("disp") === "住院");
     var needDis = state.type === "病假" && picked.indexOf("校園傳染病") >= 0;
     if (!needDis && (diseases.length || $("#dOther").value)) {
@@ -590,9 +759,76 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     if (t.matches('input[name="hw"], input[name="meal"], #t1, #t2, #onset, #diag, #admit')) buildMsg();
   });
   document.addEventListener("input", function (e) {
-    if (e.target.matches("#who, #why, #dOther, #clinic, #cram, #sib")) buildMsg();
+    if (e.target.matches("#who, #why, #dOther, #clinic, #cram, #sib, #clsIn")) buildMsg();
   });
   $("#reset").addEventListener("click", reset);
+
+
+  /* ====== 背景同步到三份表單（導師、午餐、健康中心）======
+     Google 表單只能送出、無法確認成功，所以失敗時家長端不會有提示；LINE 訊息仍是正式紀錄。 */
+  var TFORM = params.get("form") || "";
+  var TE = (params.get("e") || "").split(",");
+  var sent = {};
+  function splitWho(raw) {
+    var s = raw.trim().replace(/[０-９]/g, function (ch) { return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0); });
+    var m = s.match(/^(\d+)\s*(?:號|号)?[\s\/／\-、:：]*(.*)$/);
+    if (m) return { seat: m[1], name: m[2].trim() || raw.trim() };
+    return { seat: "", name: raw.trim() };
+  }
+  function post(key, formId, pairs) {
+    if (!formId) return false;
+    var data = new URLSearchParams();
+    pairs.forEach(function (p) { if (p[0]) data.append("entry." + p[0], p[1]); });
+    var sig = data.toString();
+    if (sent[key] === sig) return true;
+    sent[key] = sig;
+    try {
+      fetch("https://docs.google.com/forms/d/e/" + formId + "/formResponse", { method: "POST", mode: "no-cors", body: data })
+        .catch(function () { sent[key] = ""; });
+    } catch (e) { sent[key] = ""; }
+    return true;
+  }
+  function mmdd(v) { return v ? v.slice(5, 7) + v.slice(8, 10) : ""; }
+  function ymd(v) { return v ? v.replace(/-/g, "/") : ""; }
+  function sendAll(n) {
+    var person = splitWho($("#who").value);
+    var code = classCode || $("#clsIn").value.trim();
+    var seat = person.seat || "未填";
+    var seat2 = /^\d+$/.test(person.seat) ? ("0" + person.seat).slice(-2) : seat;
+    var did = false;
+    var dnames = picked.filter(function (x) { return INFECT.indexOf(x) >= 0; });
+    /* 導師表單（6 題） */
+    if (TFORM && TE[0]) {
+      var extra = [];
+      if (n.report) extra.push("傳染病通報" + (dnames.length ? "（" + dnames.join("、") + "）" : ""));
+      if (n.lunch) extra.push("午餐停餐" + (radio("meal") ? "（" + radio("meal") + "）" : ""));
+      if (n.paper) extra.push("紙本假單");
+      did = post("teacher", TFORM, [
+        [TE[0], seat], [TE[1], person.name], [TE[2], state.type], [TE[3], dateText()], [TE[4], reasonText()], [TE[5], extra.length ? extra.join("、") : "無"]
+      ]) || did;
+    }
+    /* 午餐停餐表單 */
+    if (n.lunch && LUNCH.id) {
+      var d1 = $("#d1").value, d2 = $("#d2").value || d1;
+      var L = LUNCH.e;
+      did = post("lunch", LUNCH.id, [
+        [L.cls, code], [L.seat, seat2], [L.name, person.name], [L.reason, LUNCH_REASON[state.type] || state.type],
+        [L.meal, radio("meal")], [L.range, mmdd(d1) + "-" + mmdd(d2)], [L.days, String(spanDays())], [L.refund, "0"],
+        [L.note, "家長線上填報" + (state.type === "公假" ? "；公假事由：" + reasonText() : "")]
+      ]) || did;
+    }
+    /* 健康中心傳染病通報表單 */
+    if (n.report && HEALTH.id) {
+      var H = HEALTH.e, dsp = radio("disp");
+      did = post("health", HEALTH.id, [
+        [H.cls, code], [H.seat, seat2], [H.name, person.name], [H.symptom, reasonText()],
+        [H.onset, ymd($("#onset").value)], [H.diag, ymd($("#diag").value)], [H.clinic, $("#clinic").value.trim()],
+        [H.start, ymd($("#d1").value)], [H.cram, $("#cram").value.trim()], [H.disp, dsp],
+        [H.admit, dsp === "住院" ? ymd($("#admit").value) : ""], [H.sib, $("#sib").value.trim()]
+      ]) || did;
+    }
+    return did;
+  }
 
   $("#copy").addEventListener("click", function () {
     var ta = $("#msg"), out = $("#copied");
@@ -607,10 +843,12 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       return;
     }
     var n = needs();
+    var synced = sendAll(n);
     function ok() {
+      var sy = synced ? "並同步登記" : "";
       out.textContent = n.paper
-        ? "已複製，請回到line貼給老師。請注意還需填寫紙本假單，請假尚未完成！"
-        : "已複製，請回到line貼給老師，請假才算完成！";
+        ? "已複製" + sy + "，請回到line貼給老師。請注意還需填寫紙本假單，請假尚未完成！"
+        : "已複製" + sy + "，請回到line貼給老師，請假才算完成！";
     }
     function fallback() {
       ta.focus(); ta.select();
