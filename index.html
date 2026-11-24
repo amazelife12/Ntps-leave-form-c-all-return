@@ -1,0 +1,628 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>楠梓國小班級請假單 C版</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: 聯絡簿式單欄表單。順序固定：選類型、填資訊、傳給老師，外部表單放最後，家長不必再回到本頁。 */
+:root {
+  --paper: #f3f6fa;
+  --card: #ffffff;
+  --ink: #17233a;
+  --muted: #5b6b85;
+  --rule: #d3dcea;
+  --accent: #1f4e9c;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2ebf8;
+  --stamp: #c8372d;
+  --ok: #1d7a4b;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-display: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1626; --card: #17213a; --ink: #e7edf8; --muted: #9aaac6; --rule: #2a3a5c;
+    --accent: #7fa8ee; --accent-ink: #0f1626; --accent-soft: #1d2d52; --stamp: #ff7a6e;
+    --ok: #6fd3a0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1626; --card: #17213a; --ink: #e7edf8; --muted: #9aaac6; --rule: #2a3a5c;
+  --accent: #7fa8ee; --accent-ink: #0f1626; --accent-soft: #1d2d52; --stamp: #ff7a6e;
+  --ok: #6fd3a0; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+
+header {
+  padding: 22px 18px 18px;
+  border-radius: var(--radius);
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px),
+    var(--card);
+  border: 1px solid var(--rule);
+}
+header .kicker { margin: 0; font-size: 13px; letter-spacing: .12em; color: var(--muted); font-weight: 500; }
+header h1 { margin: 4px 0 6px; font-family: var(--font-display); font-size: 34px; line-height: 1.2; font-weight: 900; letter-spacing: .04em; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); font-size: 15px; background: var(--card); display: inline; padding: 0 4px 0 0; }
+
+section { display: flex; flex-direction: column; gap: 14px; }
+h2 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .04em; scroll-margin-top: 12px; }
+.sub { margin: -6px 0 0; color: var(--muted); font-size: 14px; }
+
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg3 { grid-template-columns: repeat(3, 1fr); }
+.seg4 { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.seg4 span { padding: 8px 2px; }
+.seg3 span { flex-direction: column; gap: 2px; }
+.seg3 .ico { margin: 0; }
+.miss { outline: 2px solid var(--stamp); outline-offset: 3px; border-radius: 10px; }
+.field textarea.need, .field input.need { border-color: var(--stamp); }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span {
+  display: flex; align-items: center; justify-content: center; min-height: 52px; padding: 8px 10px;
+  border: 1.5px solid var(--rule); background: var(--card); border-radius: var(--radius);
+  font-weight: 500; text-align: center; line-height: 1.35;
+}
+.seg .ico { font-weight: 400; font-size: 24px; line-height: 1; margin-right: 8px; flex: none; }
+.seg input:checked + span { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.seg input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.count { display: inline-block; margin-left: 8px; padding: 1px 10px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-size: 13px; font-weight: 700; vertical-align: 2px; }
+.steps { margin: 0; padding: 14px 16px 14px 38px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); display: flex; flex-direction: column; gap: 8px; }
+.steps li { padding-left: 4px; }
+.steps li::marker { color: var(--accent); font-weight: 700; }
+.steps li.star { list-style: none; position: relative; }
+.steps li.star .mk { position: absolute; left: -1.25em; top: 0; color: var(--stamp); font-weight: 900; }
+.steps small { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+.item { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.item h3 { margin: 0; font-size: 16px; font-weight: 700; }
+.item p { margin: 0; font-size: 14px; color: var(--muted); }
+.tag { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); align-self: flex-start; letter-spacing: .06em; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 18px;
+  border-radius: var(--radius); border: 0; background: var(--accent); color: var(--accent-ink);
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; align-self: flex-start;
+}
+.btn:focus-visible, .linkbtn:focus-visible, .field input:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.notice { margin: 0; padding: 12px 14px; border-radius: var(--radius); background: var(--accent-soft); font-weight: 500; font-size: 15px; }
+
+.formhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.linkbtn { background: none; border: 0; padding: 0 4px; min-height: 44px; font: inherit; font-size: 14px; color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+.daycount { margin: 0; padding: 8px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 14px; line-height: 1.5; }
+.warn { margin: 0; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--stamp); color: var(--stamp); font-size: 14px; font-weight: 500; line-height: 1.5; }
+.form { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px 16px; display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field > label, .field > .lab { font-weight: 700; font-size: 15px; }
+.field input[type="text"], .field input[type="date"], .field input[type="time"], .field textarea {
+  width: 100%; min-height: 46px; padding: 9px 12px; font: inherit; color: var(--ink);
+  background: var(--paper); border: 1.5px solid var(--rule); border-radius: 8px;
+}
+.field textarea { resize: vertical; min-height: 84px; }
+.dates { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dates label { font-weight: 500; font-size: 14px; color: var(--muted); }
+@media (max-width: 420px) { .dates { grid-template-columns: 1fr; } }
+
+.out { display: flex; flex-direction: column; gap: 12px; }
+.out textarea {
+  width: 100%; min-height: 190px; padding: 14px; font: 15px/1.7 var(--font-body); color: var(--ink);
+  background: var(--card); border: 1.5px dashed var(--accent); border-radius: var(--radius); resize: vertical;
+}
+.out .btn { align-self: stretch; text-align: center; line-height: 1.45; padding-block: 12px; }
+.copied { color: var(--ok); font-weight: 700; font-size: 14px; min-height: 1.5em; margin: 0; }
+
+.finish { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: var(--radius); background: var(--accent-soft); }
+.stamp {
+  flex: none; width: 64px; height: 64px; display: grid; place-items: center; text-align: center;
+  border: 2.5px solid var(--stamp); color: var(--stamp); border-radius: 8px; transform: rotate(-6deg);
+  font-weight: 900; font-size: 15px; line-height: 1.2; letter-spacing: .05em;
+}
+.finish p { margin: 0; font-weight: 500; }
+
+.care { display:flex; flex-direction:column; gap:10px; }
+.care[hidden] { display:none; }
+.care .care-t { font-weight:700; font-size:15px; color:var(--ink); margin:0; }
+.care .care-s { font-size:13px; color:var(--muted); margin:0; }
+.field .care-s { font-size:13px; color:var(--muted); margin:0; }
+.care button.card { padding:0; border:1px solid var(--rule); border-radius:12px; overflow:hidden; background:var(--card); cursor:zoom-in; display:block; width:100%; }
+.care button.card img { display:block; width:100%; height:auto; }
+.zoom { position:fixed; inset:0; z-index:50; background:rgba(0,0,0,.82); overflow:auto; padding:12px; padding-top:calc(12px + env(safe-area-inset-top,0px)); cursor:zoom-out; }
+.zoom[hidden] { display:none; }
+.zoom img { display:block; width:100%; max-width:640px; margin:0 auto; height:auto; border-radius:10px; }
+.zoom .x { position:sticky; top:0; display:block; margin:0 0 8px auto; border:0; border-radius:99px; background:#fff; color:#17233a; font:700 14px/1 inherit; padding:9px 14px; cursor:pointer; }
+.tip { display: block; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--accent-soft); color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.5; }
+.tip .bulb { font-size: 22px; line-height: 1; vertical-align: -3px; margin-right: 6px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="kicker">楠梓國小家長專用</p>
+    <h1>🌸楠梓國小班級請假單🌸</h1>
+    <p>由上往下填寫，直到最後一步完成，才算完成請假。</p>
+  </header>
+
+  <section aria-labelledby="h-form">
+    <div class="formhead">
+      <h2 id="h-form">請假資訊</h2>
+      <button type="button" class="linkbtn" id="reset">清除重填</button>
+    </div>
+    <div class="form">
+      <div class="field">
+        <label for="who">座號／姓名</label>
+        <input type="text" id="who" placeholder="例：30號 王小楠" autocomplete="off">
+      </div>
+      <fieldset class="field">
+        <legend style="color:var(--ink);font-weight:700;font-size:15px">假別</legend>
+        <div class="seg seg3 seg4">
+          <label><input type="radio" name="type" value="事假" checked><span><b class="ico" aria-hidden="true">🌱</b>事假</span></label>
+          <label><input type="radio" name="type" value="喪假"><span><b class="ico" aria-hidden="true">🕊️</b>喪假</span></label>
+          <label><input type="radio" name="type" value="病假"><span><b class="ico" aria-hidden="true">🌺</b>病假</span></label>
+          <label><input type="radio" name="type" value="公假"><span><b class="ico" aria-hidden="true">🌻</b>公假</span></label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <span class="lab" id="dlab">請假日期</span>
+        <div class="seg" id="modeSeg">
+          <label><input type="radio" name="days" value="full" checked><span>整天（1 日以上）</span></label>
+          <label><input type="radio" name="days" value="part"><span>未滿 1 日</span></label>
+        </div>
+        <div class="dates" role="group" aria-labelledby="dlab">
+          <div class="field"><label for="d1" id="d1l">開始日</label><input type="date" id="d1"></div>
+          <div class="field" id="d2wrap"><label for="d2">結束日（只請一天可不填）</label><input type="date" id="d2"></div>
+        </div>
+        <div class="dates" id="timeRow" role="group" aria-label="請假時間" hidden>
+          <div class="field"><label for="t1">開始時間</label><input type="time" id="t1"></div>
+          <div class="field"><label for="t2">結束時間</label><input type="time" id="t2"></div>
+        </div>
+        <p class="daycount" id="dayCount" role="status" hidden></p>
+        <p class="warn" id="dateWarn" role="status" hidden></p>
+      </div>
+      <fieldset class="field" id="reasonSet">
+        <legend style="color:var(--ink);font-weight:700;font-size:15px">請假原因（可複選）</legend>
+        <div class="seg" id="reasonChips"></div>
+        <div class="field" id="diseaseWrap" hidden>
+          <div class="lab">校園傳染病病名（可複選）</div>
+          <div class="seg" id="diseaseChips"></div>
+          <div class="field" id="dOtherWrap" hidden>
+            <label for="dOther">其他傳染病名稱（必填）</label>
+            <input type="text" id="dOther" placeholder="請填寫病名" autocomplete="off">
+          </div>
+        </div>
+        <div class="field" id="otherWrap" hidden>
+          <label for="why">其他原因說明（必填）</label>
+          <textarea id="why" placeholder="請說明請假原因"></textarea>
+        </div>
+      </fieldset>
+      <div class="field epi" id="epi" hidden>
+        <div class="lab">🩺 疫調資料（導師通報時使用）</div>
+        <p class="care-s">已確診傳染病，請完整填寫以下資料，會一併複製給導師，由導師代為通報，家長不需要另外填通報表。</p>
+        <div class="dates" role="group" aria-label="發病與確診日期">
+          <div class="field"><label for="onset">發病日</label><input type="date" id="onset"></div>
+          <div class="field"><label for="diag">確診日</label><input type="date" id="diag"></div>
+        </div>
+        <div class="field"><label for="clinic">就醫院所</label><input type="text" id="clinic" placeholder="例：楠梓區○○診所" autocomplete="off"></div>
+        <div class="field"><label for="cram">安親班名稱</label><input type="text" id="cram" placeholder="沒有請填「無」" autocomplete="off"></div>
+        <div class="field">
+          <span class="lab" id="displab">處置方式</span>
+          <div class="seg" id="dispSeg" role="radiogroup" aria-labelledby="displab">
+            <label><input type="radio" name="disp" value="在家休息"><span>在家休息</span></label>
+            <label><input type="radio" name="disp" value="住院"><span>住院</span></label>
+          </div>
+        </div>
+        <div class="field" id="admitWrap" hidden><label for="admit">住院日</label><input type="date" id="admit"></div>
+        <div class="field"><label for="sib">兄弟姊妹就讀的班級、姓名</label><input type="text" id="sib" placeholder="例：三年二班 王小華；沒有請填「無」" autocomplete="off"></div>
+      </div>
+      <div class="care" id="care" hidden>
+        <p class="care-t">📖 這次的傳染病衛教提醒</p>
+        <p class="care-s">點圖片可以放大閱讀。</p>
+        <div id="careList" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+      <fieldset>
+        <legend style="color:var(--ink);font-weight:700;font-size:15px">作業是否需要放警衛室</legend>
+        <div class="seg" id="hwSeg">
+          <label><input type="radio" name="hw" value="需要"><span>需要</span></label>
+          <label><input type="radio" name="hw" value="不需要"><span>不需要</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="field" id="mealWrap" hidden>
+        <legend style="color:var(--ink);font-weight:700;font-size:15px">午餐停餐調查：葷食或素食</legend>
+        <p class="care-s">請假 3 個上課日以上需要停餐，請告訴導師孩子平常吃葷食或素食。</p>
+        <div class="seg" id="mealSeg">
+          <label><input type="radio" name="meal" value="葷食"><span>葷食</span></label>
+          <label><input type="radio" name="meal" value="素食"><span>素食</span></label>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="out" aria-labelledby="h-out">
+    <h2 id="h-out">傳給老師</h2>
+    <p class="sub" id="outSub">內容會隨上方填寫即時更新。</p>
+    <textarea id="msg" readonly aria-label="請假訊息預覽"></textarea>
+    <button class="btn" id="copy" type="button">複製請假訊息，回到line貼給老師，請假才算完成！</button>
+    <p class="copied" id="copied" role="status"></p>
+  </section>
+
+  <div class="finish">
+    <div class="stamp" aria-hidden="true">家長<br>確認</div>
+    <p id="finishText">複製請假訊息，回到line貼給老師，請假才算完成！謝謝 😊</p>
+  </div>
+</div>
+
+<div class="zoom" id="zoom" hidden><button type="button" class="x" id="zoomX">關閉 ✕</button><img id="zoomImg" alt=""></div>
+<script>
+(function () {
+  var LUNCH_URL = "https://forms.gle/cLhvQWdKdwa3FSXm8";
+  var REPORT_URL = "https://cpmimicker07-cloud.github.io/ntpshealth/";
+  var KEY = "class-leave-c-v1";
+  var TTL = 24 * 60 * 60 * 1000;
+  var state = { type: "事假", days: "full" };
+  var OPTIONS = {
+    "事假": ["家庭旅遊", "家中事務", "參加比賽或活動", "其他"],
+    "喪假": ["家人過世", "其他"],
+    "病假": ["身體不適", "受傷", "回診或看醫生", "感冒", "發燒", "嘔吐", "腹瀉", "腸病毒", "A型流感", "B型流感", "新冠", "腸胃炎/腸胃型感冒", "登革熱", "水痘", "其他"],
+    "公假": ["參加比賽或活動", "其他"]
+  };
+  var INFECT = ["腸病毒", "A型流感", "B型流感", "新冠", "腸胃炎/腸胃型感冒", "登革熱", "水痘"];
+  var DISEASES = ["腸病毒", "A型流感", "B型流感", "新冠", "腸胃炎/腸胃型感冒", "登革熱", "水痘", "其他"];
+  var picked = [];
+  var diseases = [];
+  var lastType = "";
+  var $ = function (s) { return document.querySelector(s); };
+
+  function radio(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function setRadio(name, val) {
+    if (!val) return;
+    var el = document.querySelector('input[name="' + name + '"][value="' + val + '"]');
+    if (el) el.checked = true;
+  }
+  function fmt(v) {
+    if (!v) return "";
+    var p = v.split("-").map(Number);
+    var w = "日一二三四五六"[new Date(p[0], p[1] - 1, p[2]).getDay()];
+    return p[1] + "/" + p[2] + "（週" + w + "）";
+  }
+  function tfmt(v) { return v ? v.replace(/^0/, "") : ""; }
+  function dateText() {
+    var a = fmt($("#d1").value);
+    if (!a) return "";
+    if (state.days === "part") {
+      var a1 = tfmt($("#t1").value), b1 = tfmt($("#t2").value);
+      var tm = (a1 || b1) ? (" " + a1 + "-" + b1) : "";
+      return a + tm + "，未滿1日";
+    }
+    var b = fmt($("#d2").value);
+    var n = spanDays();
+    var range = (b && $("#d1").value !== $("#d2").value) ? a + "～" + b : a;
+    return n >= 1 ? range + "，共" + n + "天" : range;
+  }
+  /* 國定假日（週一至週五的放假日，含補假）。依人事行政總處公告整理，校慶補假、寒暑假等校內假日未列入。 */
+  var HOLIDAYS = {
+    "2026-12-25": 1, "2026-12-31": 1,
+    "2027-01-01": 1, "2027-02-04": 1, "2027-02-05": 1, "2027-02-08": 1, "2027-02-09": 1, "2027-02-10": 1,
+    "2027-03-01": 1, "2027-04-05": 1, "2027-04-06": 1, "2027-04-30": 1, "2027-06-09": 1,
+    "2027-09-15": 1, "2027-09-28": 1, "2027-10-11": 1, "2027-10-25": 1, "2027-12-24": 1, "2027-12-31": 1
+  };
+  /* 週六、週日但要上課的日子：2026/12/5（週六）校慶運動會，算上課日 */
+  var EXTRA = { "2026-12-05": 1 };
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  /* 計算請假期間的上課日：排除週六、週日與國定假日；沒填開始日回傳 -1，只填開始日視為只請一天 */
+  function spanDays() {
+    var a = $("#d1").value;
+    if (!a) return -1;
+    var b = state.days === "part" ? a : ($("#d2").value || a);
+    var d = new Date(a + "T00:00:00"), end = new Date(b + "T00:00:00");
+    var count = 0, guard = 0;
+    while (d <= end && guard++ < 400) {
+      var wd = d.getDay();
+      var key = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+      if ((wd !== 0 && wd !== 6 && !HOLIDAYS[key]) || EXTRA[key]) count++;
+      d.setDate(d.getDate() + 1);
+    }
+    return count;
+  }
+  function needs() {
+    var span = spanDays();
+    var full = state.days !== "part";
+    return {
+      paper: (state.type === "事假" || state.type === "喪假") && full && span >= 5,
+      lunch: full && span >= 3,
+      report: state.type === "病假" && picked.some(function (x) { return INFECT.indexOf(x) >= 0; })
+    };
+  }
+  function readPicked() {
+    picked = Array.prototype.map.call(document.querySelectorAll('input[name="reason"]:checked'), function (el) { return el.value; });
+  }
+  function renderReasons() {
+    var opts = OPTIONS[state.type] || [];
+    $("#reasonChips").innerHTML = opts.map(function (o) {
+      return '<label><input type="checkbox" name="reason" value="' + o + '"' + (picked.indexOf(o) >= 0 ? " checked" : "") + '><span>' + (o === "其他" ? "其他(請說明)" : o === "校園傳染病" ? "校園傳染病(已確診)" : o) + '</span></label>';
+    }).join("");
+  }
+  function readDiseases() {
+    diseases = Array.prototype.map.call(document.querySelectorAll('input[name="disease"]:checked'), function (el) { return el.value; });
+  }
+  function renderDiseases() {
+    $("#diseaseChips").innerHTML = DISEASES.map(function (o) {
+      return '<label><input type="checkbox" name="disease" value="' + o + '"' + (diseases.indexOf(o) >= 0 ? " checked" : "") + '><span>' + (o === "其他" ? "其他(請說明)" : o) + '</span></label>';
+    }).join("");
+  }
+  function reasonText() {
+    var other = $("#why").value.trim();
+    return picked.map(function (r) {
+      if (r === "其他") return other ? "其他（" + other + "）" : "其他";
+      if (r === "校園傳染病") {
+        var dn = $("#dOther").value.trim();
+        var names = diseases.map(function (d) { return d === "其他" ? (dn || "其他") : d; });
+        return names.length ? "校園傳染病（" + names.join("、") + "）" : "校園傳染病";
+      }
+      return r;
+    }).join("、");
+  }
+  function daysLabel() {
+    if (state.days === "part") return "未滿1日";
+    var n = spanDays();
+    return n >= 1 ? "共" + n + "天" : "";
+  }
+
+  /* 填過的內容暫存在這支手機上 24 小時，頁面重新載入也不會消失 */
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        ts: Date.now(),
+        type: radio("type"), days: radio("days"), hw: radio("hw"),
+        onset: $("#onset").value, diag: $("#diag").value, clinic: $("#clinic").value, cram: $("#cram").value, disp: radio("disp"), meal: radio("meal"), admit: $("#admit").value, sib: $("#sib").value,
+        who: $("#who").value, d1: $("#d1").value, d2: $("#d2").value, t1: $("#t1").value, t2: $("#t2").value, why: $("#why").value, picked: picked, diseases: diseases, dOther: $("#dOther").value
+      }));
+    } catch (e) {}
+  }
+  function restore() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      var s = JSON.parse(raw);
+      if (!s || !s.ts || Date.now() - s.ts > TTL) { localStorage.removeItem(KEY); return; }
+      setRadio("type", s.type); setRadio("days", s.days); setRadio("hw", s.hw);
+      $("#who").value = s.who || "";
+      $("#d1").value = s.d1 || "";
+      $("#d2").value = s.d2 || "";
+      $("#t1").value = s.t1 || "";
+      $("#t2").value = s.t2 || "";
+      $("#why").value = s.why || "";
+      picked = Array.isArray(s.picked) ? s.picked.filter(function (x) { return typeof x === "string"; }) : [];
+      diseases = Array.isArray(s.diseases) ? s.diseases.filter(function (x) { return DISEASES.indexOf(x) >= 0; }) : [];
+      $("#dOther").value = s.dOther || "";
+      ["onset", "diag", "clinic", "cram", "admit", "sib"].forEach(function (k) { $("#" + k).value = s[k] || ""; });
+      setRadio("disp", s.disp); setRadio("meal", s.meal);
+    } catch (e) {}
+  }
+  function reset() {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    ["#who", "#d1", "#d2", "#t1", "#t2", "#why", "#onset", "#diag", "#clinic", "#cram", "#admit", "#sib"].forEach(function (s) { $(s).value = ""; });
+    Array.prototype.forEach.call(document.querySelectorAll('input[type="radio"]'), function (r) { r.checked = r.defaultChecked; });
+    picked = []; diseases = []; lastType = ""; showMiss = false;
+    $("#dOther").value = "";
+    $("#copied").textContent = "";
+    refresh();
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("#h-form").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }
+
+  var STD = {
+    "腸病毒": "自主休息7日（發病日＋7）",
+    "A型流感": "退燒後再觀察24小時，沒再發燒才能返校",
+    "B型流感": "退燒後再觀察24小時，沒再發燒才能返校",
+    "新冠": "退燒後再觀察24小時，沒再發燒才能返校",
+    "腸胃炎/腸胃型感冒": "症狀解除後再觀察48小時才能返校",
+    "水痘": "水泡完全結痂脫落才能返校"
+  };
+  function missing() {
+    var m = [];
+    if (!$("#who").value.trim()) m.push({ label: "座號／姓名", el: "#who" });
+    if (!$("#d1").value) m.push({ label: "請假日期", el: "#d1" });
+    else if (spanDays() < 1) m.push({ label: "請假日期（請檢查日期）", el: "#d1" });
+    if (state.days === "part") {
+      if (!$("#t1").value || !$("#t2").value) m.push({ label: "請假時間", el: !$("#t1").value ? "#t1" : "#t2" });
+      else if ($("#t2").value <= $("#t1").value) m.push({ label: "請假時間（結束要晚於開始）", el: "#t2" });
+    }
+    if (!picked.length) m.push({ label: "請假原因", el: "#reasonChips" });
+    else if (picked.indexOf("其他") >= 0 && !$("#why").value.trim()) m.push({ label: "其他原因說明", el: "#why" });
+    if (needs().report) {
+      if (!$("#onset").value) m.push({ label: "發病日", el: "#onset" });
+      if (!$("#diag").value) m.push({ label: "確診日", el: "#diag" });
+      if (!$("#clinic").value.trim()) m.push({ label: "就醫院所", el: "#clinic" });
+      if (!$("#cram").value.trim()) m.push({ label: "安親班名稱（沒有請填「無」）", el: "#cram" });
+      if (!radio("disp")) m.push({ label: "處置方式", el: "#dispSeg" });
+      else if (radio("disp") === "住院" && !$("#admit").value) m.push({ label: "住院日", el: "#admit" });
+      if (!$("#sib").value.trim()) m.push({ label: "兄弟姊妹就讀班級姓名（沒有請填「無」）", el: "#sib" });
+    }
+    if (!radio("hw")) m.push({ label: "作業是否放警衛室", el: "#hwSeg" });
+    if (needs().lunch && !radio("meal")) m.push({ label: "午餐葷食或素食", el: "#mealSeg" });
+    return m;
+  }
+  var showMiss = false;
+  function markMiss() {
+    Array.prototype.forEach.call(document.querySelectorAll(".miss"), function (e) { e.classList.remove("miss"); });
+    if (!showMiss) return;
+    missing().forEach(function (m) { var e = document.querySelector(m.el); if (e) e.classList.add("miss"); });
+  }
+  function buildMsg() {
+    var n = needs();
+    $("#why").classList.toggle("need", picked.indexOf("其他") >= 0 && !$("#why").value.trim());
+    $("#dOther").classList.toggle("need", diseases.indexOf("其他") >= 0 && !$("#dOther").value.trim());
+    var dl = daysLabel();
+    var dnames = picked.filter(function (x) { return INFECT.indexOf(x) >= 0; });
+    var head = "【" + state.type + (dl ? "・" + dl : "") + (n.report ? "・傳染病" + (dnames.length ? "（" + dnames.join("、") + "）" : "") : "") + (n.lunch ? "・停餐" : "") + (n.paper ? "・紙本假單" : "") + "】";
+    var lines = [
+      head,
+      "1.座號/姓名：" + $("#who").value.trim(),
+      "2.請假日期：" + dateText(),
+      "3.請假原因：" + reasonText(),
+      "4.作業是否需要放警衛室：" + radio("hw")
+    ];
+    if (n.lunch) lines.push("5.午餐葷素：" + radio("meal"));
+    var std = picked.filter(function (x) { return STD[x]; }).map(function (x) { return "・" + x + "：" + STD[x]; });
+    var blocks = [lines.join("\n")];
+    if (n.report) {
+      var dsp = radio("disp");
+      blocks.push([
+        "🩺疫調資料",
+        "・發病日：" + fmt($("#onset").value),
+        "・確診日：" + fmt($("#diag").value),
+        "・就醫院所：" + $("#clinic").value.trim(),
+        "・請假起始日：" + fmt($("#d1").value),
+        "・安親班：" + $("#cram").value.trim(),
+        "・處置方式：" + dsp + (dsp === "住院" && $("#admit").value ? "（住院日：" + fmt($("#admit").value) + "）" : ""),
+        "・兄弟姊妹就讀班級姓名：" + $("#sib").value.trim()
+      ].join("\n"));
+    }
+    if (state.type === "病假" && std.length) blocks.push("📌返校標準\n" + std.join("\n"));
+    blocks.push("✅家長請假手續已完成。");
+    if (n.paper) blocks.push("📄紙本假單：" + state.type + "5個上課日以上（共" + spanDays() + "天），需另填紙本假單，請導師提供。");
+    $("#msg").value = blocks.join("\n\n");
+    markMiss();
+    save();
+  }
+
+  var CARDS = {"腸病毒": "ev.webp", "A型流感": "flu.webp", "B型流感": "flu.webp", "新冠": "covid.webp", "腸胃炎/腸胃型感冒": "gastro.webp", "水痘": "pox.webp"};
+  var careSig = "";
+  function renderCare() {
+    var list = state.type === "病假" ? picked.filter(function (x, i, a) { return CARDS[x] && a.findIndex(function (y) { return CARDS[y] === CARDS[x]; }) === i; }) : [];
+    var sig = list.join(",");
+    if (sig === careSig) return;
+    careSig = sig;
+    $("#care").hidden = !list.length;
+    $("#careList").innerHTML = list.map(function (n) {
+      return '<button type="button" class="card" data-care="' + n + '"><img loading="lazy" src="' + CARDS[n] + '" alt="' + n + '衛教提醒"></button>';
+    }).join("");
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-care]");
+    if (b) { $("#zoomImg").src = CARDS[b.getAttribute("data-care")]; $("#zoom").hidden = false; return; }
+    if (e.target.closest && e.target.closest("#zoom")) $("#zoom").hidden = true;
+  });
+  function refresh() {
+    state.type = radio("type");
+    state.days = radio("days");
+    if (state.type !== lastType) {
+      var first = lastType === "";
+      lastType = state.type;
+      if (first) picked = picked.filter(function (x) { return (OPTIONS[state.type] || []).indexOf(x) >= 0; });
+      else { picked = []; diseases = []; $("#why").value = ""; $("#dOther").value = ""; }
+      renderReasons();
+      renderDiseases();
+    }
+    $("#otherWrap").hidden = picked.indexOf("其他") < 0;
+    renderCare();
+    var rep0 = needs().report;
+    $("#epi").hidden = !rep0;
+    $("#mealWrap").hidden = !needs().lunch;
+    $("#admitWrap").hidden = !(rep0 && radio("disp") === "住院");
+    var needDis = state.type === "病假" && picked.indexOf("校園傳染病") >= 0;
+    if (!needDis && (diseases.length || $("#dOther").value)) {
+      diseases = []; $("#dOther").value = ""; renderDiseases();
+    }
+    $("#diseaseWrap").hidden = !needDis;
+    $("#dOtherWrap").hidden = !(needDis && diseases.indexOf("其他") >= 0);
+    var part = state.days === "part";
+    $("#timeRow").hidden = !part;
+    $("#d2wrap").hidden = part;
+    $("#d1l").textContent = part ? "請假日" : "開始日";
+    var sp = spanDays();
+    var d1v = $("#d1").value, d2v = $("#d2").value;
+    var w = $("#dateWarn");
+    var msgWarn = "";
+    if (d1v && !part && d2v && d2v < d1v) msgWarn = "結束日比開始日早，請檢查日期。";
+    else if (d1v && sp === 0) msgWarn = "這段日期都是週末或國定假日，不需要請假，請檢查日期。";
+    w.textContent = msgWarn;
+    w.hidden = !msgWarn;
+    var dc = $("#dayCount");
+    if (!part && d1v && sp >= 1) {
+      dc.textContent = "共 " + sp + " 個上課日（不含週末與國定假日）";
+      dc.hidden = false;
+    } else {
+      dc.textContent = "";
+      dc.hidden = true;
+    }
+    var n = needs();
+    var extra = n.paper;
+    $("#finishText").textContent = extra
+      ? "回到line貼給老師後，請找老師索取紙本假單，填妥後交回，請假才算完成！"
+      : "複製請假訊息，回到line貼給老師，請假才算完成！謝謝 😊";
+    $("#copy").textContent = extra
+      ? "複製請假訊息，回到line貼給老師；請注意還需填寫紙本假單！"
+      : "複製請假訊息，回到line貼給老師，請假才算完成！";
+    
+    buildMsg();
+  }
+
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.matches('input[name="reason"]')) {
+      readPicked();
+      refresh();
+      return;
+    }
+    if (t.matches('input[name="disease"]')) { readDiseases(); refresh(); return; }
+    if (t.matches('input[name="type"], input[name="days"]')) { refresh(); return; }
+    if (t.matches("#d1, #d2")) { refresh(); return; }
+    if (t.matches('input[name="disp"]')) { refresh(); return; }
+    if (t.matches('input[name="hw"], input[name="meal"], #t1, #t2, #onset, #diag, #admit')) buildMsg();
+  });
+  document.addEventListener("input", function (e) {
+    if (e.target.matches("#who, #why, #dOther, #clinic, #cram, #sib")) buildMsg();
+  });
+  $("#reset").addEventListener("click", reset);
+
+  $("#copy").addEventListener("click", function () {
+    var ta = $("#msg"), out = $("#copied");
+    out.style.color = "";
+    var miss = missing();
+    if (miss.length) {
+      showMiss = true; markMiss();
+      out.style.color = "var(--stamp)";
+      out.textContent = "請先完成：" + miss.map(function (x) { return x.label; }).join("、") + "，才能複製請假訊息。";
+      var t = document.querySelector(miss[0].el);
+      if (t) { t.scrollIntoView({ block: "center", behavior: "smooth" }); if (t.focus && t.tagName !== "DIV") try { t.focus({ preventScroll: true }); } catch (e) {} }
+      return;
+    }
+    var n = needs();
+    function ok() {
+      out.textContent = n.paper
+        ? "已複製，請回到line貼給老師。請注意還需填寫紙本假單，請假尚未完成！"
+        : "已複製，請回到line貼給老師，請假才算完成！";
+    }
+    function fallback() {
+      ta.focus(); ta.select();
+      out.textContent = "請長按已選取的文字，選擇「拷貝」。";
+    }
+    try {
+      navigator.clipboard.writeText(ta.value).then(ok, fallback);
+    } catch (err) { fallback(); }
+  });
+
+  restore();
+  refresh();
+})();
+</script>
+</body></html>
