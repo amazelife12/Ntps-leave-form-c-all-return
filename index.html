@@ -170,8 +170,8 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       <li>午餐停餐、傳染病通報會由系統<strong>自動送到午餐與健康中心的表單</strong>，導師不需要另外設定。</li>
     </ol>
     <div class="field">
-      <label for="setupCls">班級代號（必填，3 位數，例：208 代表二年8班）</label>
-      <input type="text" id="setupCls" inputmode="numeric" maxlength="3" placeholder="例：208" autocomplete="off">
+      <label for="setupCls">班級代號（必填，3 位數，例：209 代表二年9班）</label>
+      <input type="text" id="setupCls" inputmode="numeric" maxlength="3" placeholder="例：209" autocomplete="off">
     </div>
     <div class="field">
       <label for="setupRaw">貼上 Google 表單「預先填寫的連結」（必填）</label>
@@ -186,31 +186,7 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     </div>
   </section>
 
-  <section class="setup-box" id="adminPanel" hidden>
-    <h2>🔧 管理者：午餐與健康中心表單設定產生器</h2>
-    <ol class="setup-guide">
-      <li>午餐、健康中心的表單題目全部設成「簡答」或「單選」題，<strong>不要收集電子郵件</strong>、不要限制 1 次回覆、不要限制登入。</li>
-      <li>用「預先填寫表單」每題都填一個測試答案（單選題選任一項），取得連結。</li>
-      <li>在下方選擇單位、貼上連結，按「產生設定」，再把結果交給網頁維護者。</li>
-    </ol>
-    <div class="field">
-      <label for="adminUnit">單位</label>
-      <select id="adminUnit" style="min-height:46px;font:inherit;border:1.5px solid var(--rule);border-radius:8px;padding:0 10px;background:var(--paper);color:var(--ink)">
-        <option value="lunch">午餐停餐表單（9 題：班級、座號、姓名、申請事由、葷素、停餐日期區間、停餐天數、退費金額、備註）</option>
-        <option value="health">健康中心通報表單（12 題：班級、座號、姓名、症狀診斷、發病日、確診日、就醫院所、請假起始日、安親班、處置方式、住院日、兄弟姊妹）</option>
-      </select>
-    </div>
-    <div class="field"><label for="adminRaw">貼上「預先填寫的連結」</label><textarea id="adminRaw"></textarea></div>
-    <button type="button" class="btn" id="adminGen" style="align-self:stretch">產生設定</button>
-    <p class="warn" id="adminErr" hidden></p>
-    <div class="setup-res" id="adminOut" hidden>
-      <strong style="font-size:14px">請複製下面整段設定：</strong>
-      <textarea id="adminText" readonly></textarea>
-    </div>
-  </section>
-
   <header>
-    <p class="kicker" id="kickerText">楠梓國小家長專用</p>
     <h1>🌸楠梓國小班級請假單🌸</h1>
     <p>由上往下填寫，直到最後一步完成，才算完成請假。</p>
   </header>
@@ -223,7 +199,7 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     <div class="form">
       <div class="field" id="clsWrap" hidden>
         <label for="clsIn">班級代號（3 位數）</label>
-        <input type="text" id="clsIn" inputmode="numeric" maxlength="3" placeholder="例：208（二年8班）" autocomplete="off">
+        <input type="text" id="clsIn" inputmode="numeric" maxlength="3" placeholder="例：209（二年9班）" autocomplete="off">
       </div>
       <div class="field">
         <label for="who">座號／姓名</label>
@@ -335,11 +311,13 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
 
   /* ====== 全校共用表單設定（由管理者產生，貼在這裡）======
      id 留空代表尚未啟用，頁面不會傳送。 */
-  var LUNCH = { id: "", e: { cls: "", seat: "", name: "", reason: "", meal: "", range: "", days: "", refund: "", note: "" } };
-  var HEALTH = { id: "", e: { cls: "", seat: "", name: "", symptom: "", onset: "", diag: "", clinic: "", start: "", cram: "", disp: "", admit: "", sib: "" } };
+  /* 午餐停餐：送到午餐承辦人貼上 Apps Script 後取得的網址（寫入午餐回覆試算表）。留空則不傳送。 */
+  var LUNCH_URL = "";
+  /* 健康中心傳染病通報：直接送到健康中心原有通報系統的 Apps Script（寫入 Google 試算表），欄位名稱與該系統相同。留空則不傳送。 */
+  var HEALTH_URL = "https://script.google.com/macros/s/AKfycbz10Eh_egrWhCyeWK9qGqeQl1KiMWEJvGU_gruK2U-tAPtrY7EeiFYNT8_APUGbRaRVrQ/exec";
   /* ====== 設定結束 ====== */
-  var LUNCH_KEYS = ["cls", "seat", "name", "reason", "meal", "range", "days", "refund", "note"];
-  var HEALTH_KEYS = ["cls", "seat", "name", "symptom", "onset", "diag", "clinic", "start", "cram", "disp", "admit", "sib"];
+  var HEALTH_DX = { "A型流感": "A型流感(+)", "B型流感": "B型流感(+)", "新冠": "新冠(+)" };
+  var HEALTH_LISTED = ["發燒", "腸病毒", "A型流感", "B型流感", "嘔吐", "腹瀉", "新冠", "水痘", "登革熱", "肺結核", "腸胃炎/腸胃型感冒"];
   var LUNCH_REASON = {
     "事假": "事假(有繳費人員停餐連續3天以上才能退費)",
     "病假": "病假(有繳費人員停餐連續3天以上才能退費)",
@@ -364,7 +342,6 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
   })();
   var $ = function (s) { return document.querySelector(s); };
   if (classLabel) {
-    $("#kickerText").textContent = "楠梓國小 " + classLabel + " 家長專用";
     document.title = "楠梓國小 " + classLabel + " 班級請假單";
   }
 
@@ -384,7 +361,7 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
       err.hidden = true;
       out.hidden = true;
       if (!/^[1-6]\d{2}$/.test(cls)) {
-        err.textContent = "請填 3 位數的班級代號，例如二年8班填 208。";
+        err.textContent = "請填 3 位數的班級代號，例如二年9班填 209。";
         err.hidden = false;
         return;
       }
@@ -418,25 +395,6 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     });
   }
 
-  if (params.get("setup") === "2") {
-    $("#adminPanel").hidden = false;
-    $("#adminGen").addEventListener("click", function () {
-      var unit = $("#adminUnit").value;
-      var keys = unit === "lunch" ? LUNCH_KEYS : HEALTH_KEYS;
-      var err = $("#adminErr"), out = $("#adminOut");
-      err.hidden = true; out.hidden = true;
-      var r = entriesOf($("#adminRaw").value.trim());
-      if (!r.id) { err.textContent = "找不到表單 ID，請貼上完整的「預先填寫的連結」。"; err.hidden = false; return; }
-      if (r.e.length !== keys.length) {
-        err.textContent = "這個單位需要 " + keys.length + " 題，但連結裡偵測到 " + r.e.length + " 個欄位。請確認每一題都填了測試答案，或題數是否一致。";
-        err.hidden = false; return;
-      }
-      var e = {};
-      keys.forEach(function (k, i) { e[k] = r.e[i]; });
-      $("#adminText").value = "var " + (unit === "lunch" ? "LUNCH" : "HEALTH") + " = " + JSON.stringify({ id: r.id, e: e }) + ";";
-      out.hidden = false;
-    });
-  }
   var KEY = "class-leave-all-v1";
   var TTL = 24 * 60 * 60 * 1000;
   var state = { type: "事假", days: "full" };
@@ -602,10 +560,10 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
     "腸胃炎/腸胃型感冒": "症狀解除後再觀察48小時才能返校",
     "水痘": "水泡完全結痂脫落才能返校"
   };
-  function needCls() { return !classCode && !!(LUNCH.id || HEALTH.id); }
+  function needCls() { return !classCode && !!(LUNCH_URL || HEALTH_URL); }
   function missing() {
     var m = [];
-    if (needCls() && !/^[1-6]\d{2}$/.test($("#clsIn").value.trim())) m.push({ label: "班級代號（3位數，例：208）", el: "#clsIn" });
+    if (needCls() && !/^[1-6]\d{2}$/.test($("#clsIn").value.trim())) m.push({ label: "班級代號（3位數，例：209）", el: "#clsIn" });
     if (!$("#who").value.trim()) m.push({ label: "座號／姓名", el: "#who" });
     if (!$("#d1").value) m.push({ label: "請假日期", el: "#d1" });
     else if (spanDays() < 1) m.push({ label: "請假日期（請檢查日期）", el: "#d1" });
@@ -807,25 +765,53 @@ legend { padding: 0; font-size: 14px; color: var(--muted); font-weight: 500; mar
         [TE[0], seat], [TE[1], person.name], [TE[2], state.type], [TE[3], dateText()], [TE[4], reasonText()], [TE[5], extra.length ? extra.join("、") : "無"]
       ]) || did;
     }
-    /* 午餐停餐表單 */
-    if (n.lunch && LUNCH.id) {
+    /* 午餐停餐：送到午餐試算表的 Apps Script（欄位值照原表單格式） */
+    if (n.lunch && LUNCH_URL) {
       var d1 = $("#d1").value, d2 = $("#d2").value || d1;
-      var L = LUNCH.e;
-      did = post("lunch", LUNCH.id, [
-        [L.cls, code], [L.seat, seat2], [L.name, person.name], [L.reason, LUNCH_REASON[state.type] || state.type],
-        [L.meal, radio("meal")], [L.range, mmdd(d1) + "-" + mmdd(d2)], [L.days, String(spanDays())], [L.refund, "0"],
-        [L.note, "家長線上填報" + (state.type === "公假" ? "；公假事由：" + reasonText() : "")]
-      ]) || did;
+      var lf = new FormData();
+      lf.append("cls", code);
+      lf.append("seat", seat2);
+      lf.append("name", person.name);
+      lf.append("reason", LUNCH_REASON[state.type] || state.type);
+      lf.append("meal", radio("meal") === "素食" ? "素" : "葷");
+      lf.append("range", mmdd(d1) + "-" + mmdd(d2));
+      lf.append("days", String(spanDays()));
+      lf.append("refund", "0");
+      lf.append("note", "家長線上填報" + (state.type === "公假" ? "；公假事由：" + reasonText() : ""));
+      var lsig = JSON.stringify(Array.from(lf.entries()));
+      if (sent.lunch !== lsig) {
+        sent.lunch = lsig;
+        try { fetch(LUNCH_URL, { method: "POST", mode: "no-cors", body: lf }).catch(function () { sent.lunch = ""; }); } catch (e) { sent.lunch = ""; }
+      }
+      did = true;
     }
-    /* 健康中心傳染病通報表單 */
-    if (n.report && HEALTH.id) {
-      var H = HEALTH.e, dsp = radio("disp");
-      did = post("health", HEALTH.id, [
-        [H.cls, code], [H.seat, seat2], [H.name, person.name], [H.symptom, reasonText()],
-        [H.onset, ymd($("#onset").value)], [H.diag, ymd($("#diag").value)], [H.clinic, $("#clinic").value.trim()],
-        [H.start, ymd($("#d1").value)], [H.cram, $("#cram").value.trim()], [H.disp, dsp],
-        [H.admit, dsp === "住院" ? ymd($("#admit").value) : ""], [H.sib, $("#sib").value.trim()]
-      ]) || did;
+    /* 健康中心傳染病通報：同一個 Apps Script，欄位名稱與原通報系統相同 */
+    if (n.report && HEALTH_URL) {
+      var dsp = radio("disp"), now = new Date();
+      var today = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
+      var dx = picked.filter(function (x) { return HEALTH_LISTED.indexOf(x) >= 0; }).map(function (x) { return HEALTH_DX[x] || x; });
+      var cl = classCode || $("#clsIn").value.trim();
+      var cname = cl ? (GRADES.charAt(+cl.charAt(0) - 1) + "年" + (+cl.slice(1)) + "班") : "";
+      var fd = new FormData();
+      fd.append("reportDate", today);
+      fd.append("className", cname);
+      fd.append("seatNumber", seat2);
+      fd.append("studentName", person.name);
+      fd.append("diagnoses", dx.join(", "));
+      fd.append("onsetDate", $("#onset").value);
+      fd.append("confirmDate", $("#diag").value);
+      fd.append("hospital", $("#clinic").value.trim());
+      fd.append("leaveStartDate", $("#d1").value);
+      fd.append("afterCareName", $("#cram").value.trim());
+      fd.append("treatment", dsp);
+      fd.append("hospitalDate", dsp === "住院" ? $("#admit").value : "");
+      fd.append("siblingsInfo", $("#sib").value.trim());
+      var hsig = JSON.stringify(Array.from(fd.entries()));
+      if (sent.health !== hsig) {
+        sent.health = hsig;
+        try { fetch(HEALTH_URL, { method: "POST", mode: "no-cors", body: fd }).catch(function () { sent.health = ""; }); } catch (e) { sent.health = ""; }
+      }
+      did = true;
     }
     return did;
   }
